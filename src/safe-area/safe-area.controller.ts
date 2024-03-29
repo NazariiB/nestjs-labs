@@ -8,13 +8,13 @@ export class SafeAreaController {
   constructor(private readonly safeAreaService: SafeAreaService) {}
 
   @Post()
-  create(@Body() createSafeAreaDto: CreateSafeAreaDto) {
-    return this.safeAreaService.create(createSafeAreaDto);
+  async create(@Body() createSafeAreaDto: CreateSafeAreaDto) {
+    return await this.safeAreaService.create(createSafeAreaDto);
   }
 
-  @Get()
-  findAll() {
-    return this.safeAreaService.findAll();
+  @Get('all/:id')
+  findAll(@Param('id') id: string) {
+    return this.safeAreaService.findAll(+id);
   }
 
   @Get(':id')

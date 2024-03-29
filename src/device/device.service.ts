@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
+import { DeviceRepository } from './device.repository';
+import { SafeArea } from 'src/safe-area/entities/safe-area.entity';
 
 @Injectable()
 export class DeviceService {
+  constructor(
+    private deviceRepo: DeviceRepository
+  ) {}
+
   create(createDeviceDto: CreateDeviceDto) {
-    return 'This action adds a new device';
+    const device = this.deviceRepo.create(createDeviceDto);
+    return this.deviceRepo.save(device);
   }
 
-  findAll() {
-    return `This action returns all device`;
+  findAll(id: number) {
+    const area = new SafeArea();
+    area.id = id;
+    return this.deviceRepo.findBy({ area });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} device`;
+    return this.deviceRepo.findOneBy({
+      id
+    });
   }
 
   update(id: number, updateDeviceDto: UpdateDeviceDto) {
-    return `This action updates a #${id} device`;
+    this.deviceRepo.update({id}, updateDeviceDto);
+    return;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} device`;
+  stopDevice(id: number) {
+    this.deviceRepo.query(`update device set status='pause' where id=${id}`);
+    return;
+  }
+
+  startDevice(id: number) {
+    this.deviceRepo.query(`update device set status='ok' where id=${id}`);
+    return;
   }
 }

@@ -12,9 +12,25 @@ export class DeviceController {
     return this.deviceService.create(createDeviceDto);
   }
 
-  @Get()
-  findAll() {
-    return this.deviceService.findAll();
+  @Post(':id')
+  setUpDevice(@Param('id') id: string) {
+    // fancy logic with communication between server, device and user app
+    return 'ok';
+  }
+
+  @Post('stop/:id')
+  stopDevice(@Param('id') id: string) {
+    return this.deviceService.stopDevice(+id);
+  }
+
+  @Post('start/:id')
+  startDevice(@Param('id') id: string) {
+    return this.deviceService.startDevice(+id);
+  }
+
+  @Get('user/:id')
+  findAll(@Param('id') id: string) {
+    return this.deviceService.findAll(+id);
   }
 
   @Get(':id')
@@ -25,10 +41,5 @@ export class DeviceController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDeviceDto: UpdateDeviceDto) {
     return this.deviceService.update(+id, updateDeviceDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.deviceService.remove(+id);
   }
 }

@@ -4,5 +4,8 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true
-  }
+  },
+  "assets": [
+    { "include": "**/*.sql", "exclude": "**/omitted.sql", "watchAssets": true }
+  ]
 }
