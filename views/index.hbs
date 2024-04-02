@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Device Management</title>
+
+  <style>
+    /* Add some styling for the scroll container */
+    .device-list-container {
+      overflow-y: scroll;
+      height: 300px; /* Adjust height as needed */
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    /* Center the content */
+    .centered-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh; /* Center vertically */
+    }
+
+    /* Style for edit and create sections */
+    .section-list {
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+      text-align: center;
+    }
+
+    .section-list li {
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    .edit-form input {
+      width: 200px; /* Adjust width as needed */
+    }
+  </style>
+</head>
+<body>
+
+<div class="centered-content">
+  <h1>Devices</h1>
+
+  <form action="/device" method="GET">
+    <label for="id">Search by Area Id:</label>
+    <input type="text" id="id" name="id" placeholder="Enter id">
+    <button type="submit">Search</button>
+    <a href="/device"><button type="button">Cancel</button></a>
+  </form>
+
+  <div class="device-list-container">
+    <ul>
+      {{#if devices}}
+        {{#each devices}}
+          <li>
+            <span>ID: {{this.id}}</span>
+            <span>Area ID: {{this.area.id}}</span>
+            <span>Status: {{this.status}}</span>
+            <span>Date: {{this.date}}</span>
+            <span>Model: {{this.model}}</span>
+            <span>Location: {{this.location}}</span>
+            <form action="/device/delete/{{this.id}}" method="POST">
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        {{/each}}
+      {{else}}
+        <p>No devices found for the search term.</p>
+      {{/if}}
+    </ul>
+  </div>
+
+  <h2>Edit Device</h2>
+  <ul class="section-list edit-form">
+    <li>
+      <form action="/device/update" method="POST">
+        <label for="updateId">Device ID:</label> <input type="number" id="updateId1" name="id" required> <br>
+        <label for="updateAreaId">Area ID:</label> <input type="number" id="updateAreaId1" name="areaId" > <br>
+        <label for="updateStatus">Status:</label> <input type="text" id="updateStatus1" name="status" ><br>
+
+        <label for="updateDate">Date:</label> <input type="date" id="updateDate1" name="date" >  <br>
+        <label for="updateModel">Model:</label> <input type="text" id="updateModel1" name="model" ><br>
+
+        <label for="updateLocation">Location:</label> <input type="text" id="updateLocation1" name="location" ><br>
+
+        <button type="submit" id="11">Update Device</button>
+      </form>
+    </li>
+  </ul>
+
+  <h2>Create New Device</h2>
+  <ul class="section-list edit-form">
+    <li>
+      <form action="/device" method="POST">
+        <label for="areaId">Area ID:</label> <input type="number" id="areaId" name="areaId" required><br>
+        <label for="status">Status:</label> <input type="text" id="status" name="status" required><br>
+
+        <label for="date">Date:</label> <input type="date" id="date" name="date" required>  <br>
+        <label for="model">Model:</label> <input type="text" id="model" name="model" required><br>
+
+        <label for="location">Location:</label> <input type="text" id="location" name="location" required><br>
+
+        <button type="submit" id="22">Create Device</button>
+      </form>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>
