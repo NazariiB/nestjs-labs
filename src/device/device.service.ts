@@ -3,6 +3,7 @@ import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
 import { DeviceRepository } from './device.repository';
 import { SafeArea } from 'src/safe-area/entities/safe-area.entity';
+import { Device } from './entities/device.entity';
 
 @Injectable()
 export class DeviceService {
@@ -12,6 +13,9 @@ export class DeviceService {
 
   create(createDeviceDto: CreateDeviceDto) {
     const device = this.deviceRepo.create(createDeviceDto);
+    const area = new SafeArea();
+    area.id = +createDeviceDto.areaId;
+    device.area = area;
     return this.deviceRepo.save(device);
   }
 
@@ -21,6 +25,10 @@ export class DeviceService {
     return this.deviceRepo.findBy({ area });
   }
 
+  findAllOnServer() {
+    return this.deviceRepo.find();
+  }
+
   findOne(id: number) {
     return this.deviceRepo.findOneBy({
       id
@@ -28,8 +36,11 @@ export class DeviceService {
   }
 
   update(id: number, updateDeviceDto: UpdateDeviceDto) {
-    this.deviceRepo.update({id}, updateDeviceDto);
-    return;
+    const device = this.deviceRepo.create(updateDeviceDto);
+    const area = new SafeArea();
+    area.id = updateDeviceDto.areaId.id;
+    device.area = area;
+    return this.deviceRepo.update({id}, device);
   }
 
   stopDevice(id: number) {
@@ -40,5 +51,11 @@ export class DeviceService {
   startDevice(id: number) {
     this.deviceRepo.query(`update device set status='ok' where id=${id}`);
     return;
+  }
+
+  delete(id: number) {
+    return this.deviceRepo.delete({
+      id,
+    });
   }
 }
