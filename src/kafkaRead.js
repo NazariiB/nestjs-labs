@@ -22,8 +22,8 @@ export class KafkaReader {
         
       }).on('data', function(data) {
         console.log(`received message: ${eventType.fromBuffer(data.value)}`);
-        const data = eventType.fromBuffer(data.value);
-        return resolver(data);
+        const result = eventType.fromBuffer(data.value);
+        return resolver(result);
       });
     }));
   } 

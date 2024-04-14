@@ -2,6 +2,7 @@ import readline from 'node:readline';
 import { Reader } from './reader.js';
 import { FileReader } from './fileReader.js';
 import { KafkaReader } from './kafkaRead.js';
+import { KafkaSafe } from './kafkaSafe.js';
 
 const main = () => {
   const rl = readline.createInterface({
@@ -13,6 +14,7 @@ const main = () => {
   const reader = new Reader();
   const fileReader = new FileReader();
   const kafkaReader = new KafkaReader();
+  const kafkaSafe = new KafkaSafe();
 
   const waitForInput = () => {
     rl.question(`read/add data (r/a)?`, async inputFirst => {
@@ -36,7 +38,9 @@ const main = () => {
           waitForInput();
         });
       } else if (inputFirst === 'a') {
-        
+        rl.question(`input data in a row`, async newData => {
+          kafkaSafe.safeData(newData);
+        });
       }
       waitForInput();
     })
