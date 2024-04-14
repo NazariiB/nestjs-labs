@@ -1,7 +1,7 @@
 import readline from 'node:readline';
 import { Reader } from './reader.js';
 import { FileReader } from './fileReader.js';
-import { KafkaReader } from './kafkaRead.js';
+import { ServerReader } from './serverReader.js';
 import { KafkaSafe } from './kafkaSafe.js';
 
 const main = () => {
@@ -13,7 +13,7 @@ const main = () => {
 
   const reader = new Reader();
   const fileReader = new FileReader();
-  const kafkaReader = new KafkaReader();
+  const serverReader = new ServerReader();
   const kafkaSafe = new KafkaSafe();
 
   const waitForInput = () => {
@@ -22,14 +22,15 @@ const main = () => {
         rl.close();
         return;
       } else if (inputFirst === 'r') {
-        rl.question(`read from file or kafka(f/k)?`, async input => {
+        rl.question(`read from file or server(f/s)?`, async input => {
           text = input;
           if (input === 'e') {
             rl.close();
             return;
-          } else if (input === 'k') {
-            reader.setReader(kafkaReader);
+          } else if (input === 's') {
+            reader.setReader(serverReader);
             const data = await reader.read();
+            console.log(data);
           } else if (input === 'f') {
             reader.setReader(fileReader);
             const data = await reader.read();
@@ -38,8 +39,9 @@ const main = () => {
           waitForInput();
         });
       } else if (inputFirst === 'a') {
-        rl.question(`input data in a row`, async newData => {
+        rl.question(`input data in a row\n`, async newData => {
           kafkaSafe.safeData(newData);
+          waitForInput();
         });
       }
       waitForInput();
