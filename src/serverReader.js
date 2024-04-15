@@ -7,7 +7,11 @@ export class ServerReader {
     return res.data.map(el => {
       const message = [];
       for (let i in el) {
-        message.push(el[i]);
+        if (el[i].length > 20) {
+          message.push(el[i].slice(0, 20) + '...');
+        } else {
+          message.push(el[i]);
+        }
       }
       return message.join(' | ');
     }).join('\n');
